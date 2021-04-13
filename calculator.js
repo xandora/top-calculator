@@ -12,5 +12,18 @@ const divide = function (a, b) {
 }
 
 const operate = function (a, b, operator) {
-    return operator(a, b);
+    switch(operator) {
+        case '+':
+            return add(a, b);
+            break;
+        case '-':
+            return subtract(a, b);
+            break;
+        case '*':
+            return multiply(a, b);
+            break;
+        case '/':
+            return divide(a, b);
+            break;
+    }
 }
