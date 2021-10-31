@@ -33,6 +33,19 @@ const operate = function (a, b, operator) {
     }
 };
 
+const clear = function() {
+    inputA = "";
+    inputB = "";
+    operator = "";
+}
+
+const clearAll = function() {
+    register = "";
+    inputA = "";
+    inputB = "";
+    operator = "";
+}
+
 const updateScreen = function(button) {
     if(button.classList.contains("number")) {
         if(screen.textContent == "0"){
@@ -40,9 +53,7 @@ const updateScreen = function(button) {
         }
         else if(inputB != "") {
             screen.textContent = button.textContent;
-            inputA = "";
-            inputB = "";
-            operator = "";
+            clear();
         }
         else {
             screen.textContent += button.textContent;
@@ -57,12 +68,12 @@ const updateScreen = function(button) {
         }
     }
     else if(button.classList.contains("operator")) {
-        register = screen.textContent;
+        inputA = screen.textContent;
         operator = button.textContent;
         screen.textContent = "";
     }
     else if(button.classList.contains("equals")) {
-        inputA = register;
+        //inputA = register;
         inputB = screen.textContent;
         operate(parseFloat(inputA), parseFloat(inputB), operator);
     }
