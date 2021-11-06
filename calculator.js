@@ -2,41 +2,41 @@ let register = "";
 let inputA = "";
 let inputB = "";
 let operator = "";
+let result = "";
 
 const add = function (a, b) {
-    return a + b;
+    return parseFloat(a) + parseFloat(b);
 };
 const subtract = function (a, b) {
-    return a - b;
+    return parseFloat(a) - parseFloat(b);
 };
 const multiply = function (a, b) {
-    return a * b;
+    return parseFloat(a) * parseFloat(b);
 };
 const divide = function (a, b) {
-    return a / b;
+    return parseFloat(a) / parseFloat(b);
 };
 
 const operate = function (a, b, operator) {
     switch(operator) {
         case '+':
-            screen.textContent = add(a, b);
+            return add(a, b);
             break;
         case '-':
-            screen.textContent = subtract(a, b);
+            return subtract(a, b);
             break;
         case '*':
-            screen.textContent = multiply(a, b);
+            return multiply(a, b);
             break;
         case '/':
-            screen.textContent = divide(a, b);
+            return divide(a, b);
             break;
     }
 };
 
 const clear = function() {
-    inputA = "";
-    inputB = "";
-    operator = "";
+    register = "";
+    result = "";
 }
 
 const clearAll = function() {
@@ -46,17 +46,25 @@ const clearAll = function() {
     operator = "";
 }
 
-const updateScreen = function(button) {
+const updateScreen = function(value) {
+    screen.textContent = value;
+}
+
+const mainCalc = function(button) {
     if(button.classList.contains("number")) {
-        if(screen.textContent == "0"){
-            screen.textContent = button.textContent;
+        if(register == ""){
+            register = button.textContent;
+            updateScreen(register);
         }
-        else if(inputB != "") {
-            screen.textContent = button.textContent;
+        else if(result != "") {
             clear();
+            register = button.textContent;
+            updateScreen(register);
+            
         }
         else {
-            screen.textContent += button.textContent;
+            register += button.textContent;
+            updateScreen(register);
         }
     }
     else if(button.classList.contains("dot")) {
@@ -64,18 +72,37 @@ const updateScreen = function(button) {
 
         }
         else {
-            screen.textContent += "."
+            register += "."
         }
     }
+    else if(button.classList.contains("clear")) {
+        clear();
+        updateScreen(inputA);
+    }
+    else if(button.classList.contains("allclear")) {
+        clearAll();
+        updateScreen("0");
+    }
     else if(button.classList.contains("operator")) {
-        inputA = screen.textContent;
-        operator = button.textContent;
-        screen.textContent = "";
+        if(inputA == "") {
+            inputA = register;
+            register = "";
+            operator = button.textContent;
+        }
+        else { 
+            inputB = register;
+            register = "";
+            inputA = operate(inputA, inputB, operator);
+            screen.textContent = inputA;
+            operator = button.textContent;
+        }
     }
     else if(button.classList.contains("equals")) {
-        //inputA = register;
-        inputB = screen.textContent;
-        operate(parseFloat(inputA), parseFloat(inputB), operator);
+        inputB = register;
+        result = operate(inputA, inputB, operator);
+        inputA = "";
+        inputB = "";
+        screen.textContent = result;
     }
 };
 
@@ -86,6 +113,6 @@ screen.textContent = 0;
 
 buttons.forEach((button) => {  
     button.addEventListener('click', () => {
-        updateScreen(button);
+        mainCalc(button);
     })
 });
