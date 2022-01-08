@@ -1,6 +1,6 @@
 let register = "";
 let inputA = "";
-let inputB = "";
+let inputB = "0";
 let operator = "";
 
 const add = function (a, b) {
@@ -35,13 +35,13 @@ const operate = function (a, b, operator) {
 
 const updateScreen = function(button) {
     if(button.classList.contains("number")) {
-        if(screen.textContent == "0"){
+        if(screen.textContent == "0" || ["*","/","+","-"].indexOf(screen.textContent) !== -1){
             screen.textContent = button.textContent;
         }
         else if(inputB != "") {
             screen.textContent = button.textContent;
             inputA = "";
-            inputB = "";
+            inputB = "0";
             operator = "";
         }
         else {
@@ -59,7 +59,7 @@ const updateScreen = function(button) {
     else if(button.classList.contains("operator")) {
         register = screen.textContent;
         operator = button.textContent;
-        screen.textContent = "";
+        screen.textContent = operator;
     }
     else if(button.classList.contains("equals")) {
         inputA = register;
@@ -67,6 +67,13 @@ const updateScreen = function(button) {
         operate(parseFloat(inputA), parseFloat(inputB), operator);
     }
 };
+
+const clearScreen = function() {
+    screen.textContent = "";
+    inputA = "";
+    inputB = "0";
+    operator = "";
+}
 
 const screen = document.body.querySelector("#display");
 const buttons = document.body.querySelectorAll(".button");
