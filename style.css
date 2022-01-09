@@ -1,4 +1,4 @@
-#container {
+#buttons {
     width: 200px;
     height: 200px;
     border: 1px solid black;
@@ -6,7 +6,7 @@
     grid-template-columns: repeat(4, 1fr);
 }
 
-#container > button {
+#buttons > button {
     border: 1px solid black;
 }
 
