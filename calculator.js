@@ -25,10 +25,10 @@ const operate = function (a, b, operator) {
         case '-':
             return subtract(a, b);
             break;
-        case '*':
+        case '×':
             return multiply(a, b);
             break;
-        case '/':
+        case '÷':
             return divide(a, b);
             break;
     }
