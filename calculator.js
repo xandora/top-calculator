@@ -18,8 +18,9 @@ const operate = function (a, b, operator) {
 };
 
 const clear = function () {
-    register = "0";
+    register = "";
     result = "";
+    screen.textContent = "0";
 }
 
 const clearAll = function () {
@@ -31,21 +32,79 @@ const clearAll = function () {
 
 const updateScreen = function (...args) {
     screen.textContent = args[0];
-    subScreen.textContent = args[1];
+    // subScreen.textContent = args[1];
 }
 
-const mainCalc = function (button) {
+const mainCalcSwitch = function (button) {
+    console.log(button.target.classList[1] + " " + button.target.id)
+    switch (button.target.classList[1]) {
+        case "number":
+            if (register === "") {
+                updateScreen(register = button.target.textContent);
+            } else if (result !== "") {
+                clear();
+                updateScreen("0", register = button.target.textContent);
+            } else {
+                updateScreen(register += button.target.textContent);
+            };
+            break;
+
+        case "dot":
+            if (screen.textContent.includes(".")) {
+
+            } else {
+                updateScreen(register += ".");
+            };
+            break;
+
+        case "clear":
+            screen.textContent = "0";
+            clear();
+            break;
+
+        case "allclear":
+            clearAll();
+            updateScreen("0");
+            break;
+
+        case "operator":
+            if (inputA === "") {
+                inputA = register; 
+                register = "";
+                operator = button.target.textContent;
+            } else {
+                inputB = register;
+                register = "";
+                inputA = operate(inputA, register, operator);
+                screen.textContent = inputA;
+                operator = button.target.textContent;
+            };
+            break;
+
+        case "equals":
+            result = operate(inputA, register, operator);
+            inputA = "";
+            inputB = "";
+            screen.textContent = result;
+            register = result;
+            break;
+        default:
+            break;
+    }
+}
+
+/* const mainCalc = function (button) {
     if (button.classList.contains("number")) {
         if (register === "") {
-            register = button.textContent;
+            register = button.target.textContent;
             updateScreen(register);
         } else if (result !== "") {
             clear();
-            register = button.textContent;
+            register = button.target.textContent;
             updateScreen("0", register);
 
         } else {
-            register += button.textContent;
+            register += button.target.textContent;
             updateScreen(register);
         }
     } else if (button.classList.contains("dot")) {
@@ -64,13 +123,13 @@ const mainCalc = function (button) {
         if (inputA === "") {
             inputA = register; 
             register = "";
-            operator = button.textContent;
+            operator = button.target.textContent;
         } else {
             inputB = register;
             register = "";
             inputA = operate(inputA, inputB, operator);
             screen.textContent = inputA;
-            operator = button.textContent;
+            operator = button.target.textContent;
         }
     } else if (button.classList.contains("equals")) {
         inputB = register;
@@ -80,6 +139,7 @@ const mainCalc = function (button) {
         screen.textContent = result;
     }
 };
+ */
 
 const screen = document.body.querySelector("#digits");
 const subScreen = document.body.querySelector("#sub-digits");
@@ -96,9 +156,8 @@ screen.textContent = 0;
 const BUTTONS = document.body.querySelector("#buttons");
 
 function clickedWhat(e) {
-    console.log(`you clicked on: ${e.target.id}\n`);
-    console.log(e);
-    mainCalc(e.target);
+    // mainCalc(e.target);
+    mainCalcSwitch(e);
 };
 
 BUTTONS.addEventListener('click', clickedWhat);
