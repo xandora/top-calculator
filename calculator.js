@@ -5,28 +5,15 @@ let operator = "";
 let result = "";
 
 const operate = function (a, b, operator) {
-    const add = function (a, b) {
-        return parseFloat(a) + parseFloat(b);
-    };
-    const subtract = function (a, b) {
-        return parseFloat(a) - parseFloat(b);
-    };
-    const multiply = function (a, b) {
-        return parseFloat(a) * parseFloat(b);
-    };
-    const divide = function (a, b) {
-        return parseFloat(a) / parseFloat(b);
-    };
-
     switch (operator) {
         case '+':
-            return add(a, b);
+            return parseFloat(a) + parseFloat(b);
         case '-':
-            return subtract(a, b);
+            return parseFloat(a) - parseFloat(b);
         case '×':
-            return multiply(a, b);
+            return parseFloat(a) * parseFloat(b);
         case '÷':
-            return divide(a, b);
+            return parseFloat(a) / parseFloat(b);
     }
 };
 
