@@ -17,76 +17,66 @@ const operate = function (a, b, operator) {
     }
 };
 
-const clear = function () {
-    register = "";
-    result = "";
-    screen.textContent = "0";
-}
-
-const clearAll = function () {
-    register = "";
-    inputA = "";
-    inputB = "";
-    operator = "";
-}
-
 const updateScreen = function (...args) {
     screen.textContent = args[0];
     // subScreen.textContent = args[1];
 }
 
-const mainCalcSwitch = function (button) {
-    console.log(button.target.classList[1] + " " + button.target.id)
-    switch (button.target.classList[1]) {
+const mainCalcSwitch = function (event, actionType) {
+    switch (actionType) {
+
         case "number":
             if (register === "") {
-                updateScreen(register = button.target.textContent);
+                updateScreen(register = event.target.textContent);
             } else if (result !== "") {
-                clear();
-                updateScreen("0", register = button.target.textContent);
+                result = "";
+                updateScreen(register = event.target.textContent);
             } else {
-                updateScreen(register += button.target.textContent);
+                updateScreen(register += event.target.textContent);
             };
             break;
 
         case "dot":
-            if (screen.textContent.includes(".")) {
-
-            } else {
+            if (!screen.textContent.includes(".")) {
                 updateScreen(register += ".");
             };
             break;
 
         case "clear":
-            screen.textContent = "0";
-            clear();
+            result = "";
+            register = "";
             break;
 
         case "allclear":
-            clearAll();
+            register = "";
+            inputA = "";
+            inputB = "";
+            operator = "";
             updateScreen("0");
             break;
 
         case "operator":
-            if (inputA === "") {
-                inputA = register; 
-                register = "";
-                operator = button.target.textContent;
+            if (inputA == "") { 
+                inputA = register;
+                operator = event.target.textContent;
             } else {
                 inputB = register;
-                register = "";
-                inputA = operate(inputA, register, operator);
-                screen.textContent = inputA;
-                operator = button.target.textContent;
+                inputA = operate(inputA, inputB, operator);
+                updateScreen(inputA);
+                operator = event.target.textContent;
             };
+            register = "";
             break;
 
         case "equals":
-            result = operate(inputA, register, operator);
-            inputA = "";
-            inputB = "";
-            screen.textContent = result;
-            register = result;
+            if (inputA == "") {
+                updateScreen(register);
+                break;
+            }
+            inputB = register;
+            result = operate(inputA, inputB, operator);
+            updateScreen(result);
+            inputA = result;
             break;
         default:
             break;
@@ -145,7 +135,7 @@ const screen = document.body.querySelector("#digits");
 const subScreen = document.body.querySelector("#sub-digits");
 const buttons = document.body.querySelectorAll(".button");
 
-screen.textContent = 0;
+updateScreen(0);
 
 /* buttons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -153,14 +143,16 @@ screen.textContent = 0;
     })
 }); */
 
-const BUTTONS = document.body.querySelector("#buttons");
+//const BUTTONS = document.body.querySelector("#buttons");
+const actionTypes = ['number', 'operator', 'dot', 'equals', 'clear', 'allclear']
 
 function clickedWhat(e) {
-    // mainCalc(e.target);
-    mainCalcSwitch(e);
+    const actionType = [...e.target.classList]
+    .find( (className) =>  actionTypes.includes(className));
+    mainCalcSwitch(e, actionType);
 };
 
-BUTTONS.addEventListener('click', clickedWhat);
+document.body.addEventListener('click', clickedWhat);
 
 // Is it possible to have multiple Event Listeners and split up the mainCalc() code that way?
 // Event Listener groups?
